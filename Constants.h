@@ -1,3 +1,4 @@
+#pragma once
 
 #define DEFAULT_SIZE 8
 #define POSITION_BIT_SIZE 4
@@ -27,3 +28,4 @@
 #define WHITE true
 #define BLACK false
 
+static const uint8_t MASKS[] = {WHITE_MASK, BLACK_MASK};

@@ -41,16 +41,6 @@ void displayBinary(Chessboard board) {
     }
 }
 
-void displayHexadecimal(Chessboard board) {
-    for (int y = DEFAULT_SIZE - 1; y >= 0; y--) {
-        for (int x = 0; x < DEFAULT_SIZE; x++) {
-            cout << hex << (int)getPosition(board, x, y) << " ";
-        }
-        cout << endl;
-        
-    }
-}
-
 void displayBoard(Chessboard board) {    
     const char CHAR_DISPLAY[] = {' ', 'K', 'Q', 'R', 'N', 'B', 'P', 'X'};
     cout << "  +---+---+---+---+---+---+---+---+" << endl;
@@ -71,7 +61,7 @@ void displayBoard(Chessboard board) {
     cout << endl;
 }
 
-bool move(Chessboard& board, Move p) {
+bool validateMove(Chessboard board, Move p, bool color) {
     cout << endl << "Movement (" << (int)p.fromX << "," << (int)p.fromY
          << ") to (" << (int)p.toX << "," << (int)p.toY << ")" << endl;
     
@@ -90,7 +80,12 @@ bool move(Chessboard& board, Move p) {
     cout << "Moving piece " << bitset<4>(position) << endl;
     
     if (position == EMPTY) {
-        cout << "-- Can't move empty tile" << position << endl;
+        cout << "-- Can't move empty tile" << endl;
+        return false;
+    }
+    
+    if (getColor(position) != color) {
+        cout << "-- Can't move opponent's pieces" << endl;
         return false;
     }
     
@@ -148,10 +143,14 @@ bool move(Chessboard& board, Move p) {
         return false;       
     }
     
-    board = output;
     cout << "-- Movement accepted" << endl;
-    
     return true;
+}
+
+void move(Chessboard& board, Move m) {
+    uint8_t position = getPosition(board, m.fromX, m.fromY);
+    setPosition(board, position, m.toX, m.toY);
+    setPosition(board, EMPTY, m.fromX, m.fromY);
 }
 
 bool validateKing(Chessboard board, uint8_t dest, Move p) {
