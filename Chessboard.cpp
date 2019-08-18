@@ -18,12 +18,10 @@ uint8_t getPosition(Chessboard board, uint8_t x, uint8_t y) {
 
 void setPosition(Chessboard& board, uint8_t position, uint8_t x, uint8_t y) {
     size_t index = POSITION_BIT_SIZE * (y * DEFAULT_SIZE + x);
-    //cout << "Writing: " << bitset<8>(position) << endl;
     for (int i = 0; i < POSITION_BIT_SIZE; i++) { 
         board[index + i] = position & 0b0001;
         position >>= 1;
     }
-    //cout << "Result: " << bitset<8>(getPosition(board, x, y)) << endl;
 }
 
 bool getColor(uint8_t position) {
@@ -132,7 +130,7 @@ bool move(Chessboard& board, Move p) {
             break;
         
         case PAWN:
-            if (!validatePawn(board, destination, p))
+            if (!validatePawn(board, destination, p, getColor(position)))
                 return false;
             break;
         
@@ -227,14 +225,16 @@ bool validateBishop(Chessboard board, uint8_t dest, Move p) {
     return false; 
 }
 
-bool validatePawn(Chessboard board, uint8_t dest, Move p) {
+bool validatePawn(Chessboard board, uint8_t dest, Move p, bool color) {
+    int offset = color == WHITE ? 1 : -1;
     if (dest == EMPTY && p.fromX == p.toX) {
-        if (p.fromY + 1 == p.toY)
+        if (p.fromY + offset == p.toY)
             return true;
-        if (p.fromY + 2 == p.toY && p.fromY == 1)
+        uint8_t pawnStartY = color == WHITE ? 1 : 6;
+        if (p.fromY + offset * 2 == p.toY && p.fromY == pawnStartY)
             return true;
     }
-    if (dest != EMPTY && abs(p.fromX - p.toX) == 1 && p.fromY + 1 == p.toY) {
+    if (dest != EMPTY && abs(p.fromX - p.toX) == 1 && p.fromY + offset == p.toY) {
         return true; 
     }
     cout << "-- Invalid pawn movement" << endl;
@@ -242,9 +242,6 @@ bool validatePawn(Chessboard board, uint8_t dest, Move p) {
 }
 
 bool hasCheck(Chessboard board, bool color) {
-    if (color == BLACK) {
-        return true;
-    }
     uint8_t maskUser, maskOpponent;
     if (color == WHITE) {
         maskUser = WHITE_MASK;
@@ -267,7 +264,6 @@ bool hasCheck(Chessboard board, bool color) {
     }
     
     found:
-    cout << "King at " << (int)kingX << (int)kingY << endl;
     
     // Check if knight is attacking
     targetPiece = KNIGHT | maskOpponent;

@@ -22,7 +22,7 @@ bool validateQueen(Chessboard board, uint8_t dest, Move p);
 bool validateRook(Chessboard board, uint8_t dest, Move p);
 bool validateKnight(Chessboard board, uint8_t dest, Move p);
 bool validateBishop(Chessboard board, uint8_t dest, Move p);
-bool validatePawn(Chessboard board, uint8_t dest, Move p);
+bool validatePawn(Chessboard board, uint8_t dest, Move p, bool color);
 
 bool hasCheck(Chessboard board, bool color);
 
