@@ -79,8 +79,7 @@ MeasuredBoard Engine::getInitialMeasure(Chessboard board) const {
 //    for (uint8_t y = 0; y < DEFAULT_SIZE; y++) {
 //        for (uint8_t x = 0; x < DEFAULT_SIZE; x++) {
 //            position = getPosition(b.board, x, y);
-//            
-//        }
+//             v
 //    }
 //    
 //}
@@ -105,3 +104,74 @@ MeasuredBoard Engine::getInitialMeasure(Chessboard board) const {
 //    
 //}
 
+unordered_set<MeasuredBoard> Engine::getValidMoves(MeasuredBoard b, bool color) {
+    unordered_set<MeasuredBoard> moves, current;
+    
+    uint8_t position;
+    
+    for (uint8_t y = 0; y < DEFAULT_SIZE; y++) {
+        for (uint8_t x = 0; x < DEFAULT_SIZE; x++) {
+            position = getPosition(b.board, x, y);
+            if ((position & MASKS[color]) == MASKS[color]) {
+                
+                switch (position & PIECE_MASK) {
+                    case KING:
+                    case QUEEN:
+                    case ROOK:
+                    case KNIGHT:
+                        current = getMovesKnight(b, color, x, y);
+                    case BISHOP:
+                    case PAWN:
+                    default:
+                        
+                }
+                moves.insert(current);
+            }
+        }
+    }
+    return moves;
+}
+
+unordered_set<MeasuredBoard> Engine::getMovesKnight(MeasuredBoard b, bool color, uint8_t x, uint8_t y) {
+    unordered_set<MeasuredBoard> movesFound;
+    Move currentMove;
+    currentMove.fromX = x;
+    currentMove.fromY = y;
+    for (uint8_t toX = x - 2; toX <= x + 2; toX+=4) {
+        if (toX >= DEFAULT_SIZE) continue;
+        for (uint8_t toY = y - 1; toY <= y + 1; toY+=2) {
+            if (toY >= DEFAULT_SIZE) continue;
+            uint8_t target = getPosition(b, toX, toY);
+            if (target == EMPTY || target & MASKS[color] != MASKS[color]) {
+                MeasuredBoard found(b);
+                currentMove.toX = toX;
+                currentMove.toY = toY;
+                b.score -= PIECE_SCORE[target];
+                move(found.board, currentMove);
+                if (!hasCheck(found.board)) {
+                    movesFound.insert(found);
+                }
+            }
+        }    
+    }
+    
+    for (uint8_t toX = x - 1; toX <= x + 1; toX+=2) {
+        if (toX >= DEFAULT_SIZE) continue;
+        for (uint8_t toY = y - 2; toY <= y + 2; toY+=4) {
+            if (toY >= DEFAULT_SIZE) continue;
+            uint8_t target = getPosition(b, toX, toY);
+            if (target == EMPTY || target & MASKS[color] != MASKS[color]) {
+                MeasuredBoard found(b);
+                currentMove.toX = toX;
+                currentMove.toY = toY;
+                b.score -= PIECE_SCORE[target];
+                move(found.board, currentMove);
+                if (!hasCheck(found.board)) {
+                    movesFound.insert(found);
+                }
+            }
+        }    
+    }
+    
+    return movesFound;
+}
