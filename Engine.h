@@ -8,9 +8,46 @@ static const int8_t PIECE_SCORE[] =
     {0, 80, 9, 5, 3, 3, 1, 0, 0, -80, -9, -5, -3, -3, -1, 0};
 
 struct MeasuredBoard {
+    
     Chessboard board;
     int8_t score; // your piece score - opponent piece score
+    
+    MeasuredBoard() : board(0), score(0) {};
+    MeasuredBoard(const Chessboard b, const int8_t s) : board(b), score(s) {};
+    MeasuredBoard(const MeasuredBoard& other) {
+        board = other.board;
+        score = other.score;
+    }
+    
+    MeasuredBoard& operator=(const MeasuredBoard other) {
+        board = other.board;
+        score = other.score;
+        return *this;
+    }
+    
+    bool operator==(const MeasuredBoard other) const {
+        return board == other.board;
+    }
+    
+    bool operator<(const MeasuredBoard other) const {
+        for (int i = BOARD_BIT_SIZE - 1; i >= 0; i--) {
+            if (board[i] ^ other.board[i]) 
+                return other.board[i];
+        }
+        return false;
+    }
+        
 };
+
+namespace std {
+    template<> struct hash<MeasuredBoard> {
+        size_t operator()(const MeasuredBoard& b) const noexcept {
+            hash<Chessboard> hasher;
+            return hasher(b.board);
+        }
+    };
+}
+
 
 using namespace std;
 

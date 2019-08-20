@@ -59,7 +59,7 @@ Move Engine::getBestMove(Chessboard board, bool color, int depth) {
 //}
 
 MeasuredBoard Engine::getInitialMeasure(Chessboard board) const {
-    MeasuredBoard out = {};
+    MeasuredBoard out;
     for (uint8_t y = 0; y < DEFAULT_SIZE; y++) {
         for (uint8_t x = 0; x < DEFAULT_SIZE; x++) {
             out.score += PIECE_SCORE[getPosition(board, x, y)];
@@ -113,19 +113,24 @@ unordered_set<MeasuredBoard> Engine::getValidMoves(MeasuredBoard b, bool color) 
         for (uint8_t x = 0; x < DEFAULT_SIZE; x++) {
             position = getPosition(b.board, x, y);
             if ((position & MASKS[color]) == MASKS[color]) {
-                
                 switch (position & PIECE_MASK) {
                     case KING:
+                        break;
                     case QUEEN:
+                        break;
                     case ROOK:
+                        break;
                     case KNIGHT:
                         current = getMovesKnight(b, color, x, y);
+                        break;
                     case BISHOP:
+                        break;
                     case PAWN:
+                        break;
                     default:
-                        
+                        break;
                 }
-                moves.insert(current);
+                //moves.insert(current);
             }
         }
     }
@@ -141,14 +146,14 @@ unordered_set<MeasuredBoard> Engine::getMovesKnight(MeasuredBoard b, bool color,
         if (toX >= DEFAULT_SIZE) continue;
         for (uint8_t toY = y - 1; toY <= y + 1; toY+=2) {
             if (toY >= DEFAULT_SIZE) continue;
-            uint8_t target = getPosition(b, toX, toY);
+            uint8_t target = getPosition(b.board, toX, toY);
             if (target == EMPTY || target & MASKS[color] != MASKS[color]) {
                 MeasuredBoard found(b);
                 currentMove.toX = toX;
                 currentMove.toY = toY;
                 b.score -= PIECE_SCORE[target];
                 move(found.board, currentMove);
-                if (!hasCheck(found.board)) {
+                if (!hasCheck(found.board, color)) {
                     movesFound.insert(found);
                 }
             }
@@ -159,14 +164,14 @@ unordered_set<MeasuredBoard> Engine::getMovesKnight(MeasuredBoard b, bool color,
         if (toX >= DEFAULT_SIZE) continue;
         for (uint8_t toY = y - 2; toY <= y + 2; toY+=4) {
             if (toY >= DEFAULT_SIZE) continue;
-            uint8_t target = getPosition(b, toX, toY);
+            uint8_t target = getPosition(b.board, toX, toY);
             if (target == EMPTY || target & MASKS[color] != MASKS[color]) {
                 MeasuredBoard found(b);
                 currentMove.toX = toX;
                 currentMove.toY = toY;
                 b.score -= PIECE_SCORE[target];
                 move(found.board, currentMove);
-                if (!hasCheck(found.board)) {
+                if (!hasCheck(found.board, color)) {
                     movesFound.insert(found);
                 }
             }
