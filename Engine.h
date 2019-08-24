@@ -58,7 +58,7 @@ class Engine {
         Engine();
         virtual ~Engine();
         
-        Move getBestMove(Chessboard board, bool color, int depth);
+        Chessboard getBestMove(Chessboard board, bool color, int depth);
         MeasuredBoard getInitialMeasure(Chessboard board) const; // make private later
         
         unordered_set<MeasuredBoard> getValidMoves(MeasuredBoard b, bool color);

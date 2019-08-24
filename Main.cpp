@@ -31,13 +31,13 @@ int main(int argc, char** argv) {
         Move m = moveWrapper(board, input);
         if (validateMove(board, m, turn)) {
             move(board, m);
-            turn = !turn;
+            board = engine.getBestMove(board, BLACK, 0);
         }
         
     displayBoard(board);
     
-    measuredBoard = engine.getInitialMeasure(board);
-    engine.getValidMoves(measuredBoard, BLACK);
+//    measuredBoard = engine.getInitialMeasure(board);
+//    engine.getValidMoves(measuredBoard, BLACK);
 
     }
     
