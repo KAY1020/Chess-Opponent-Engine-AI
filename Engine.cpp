@@ -17,12 +17,13 @@ Chessboard Engine::getBestMove(Chessboard board, bool color, int depth) {
     }
     
     
-    MeasuredBoard bestBoard(board, 100);
+    MeasuredBoard bestBoard(board, color == WHITE ? -100 : 100);
     for (const MeasuredBoard b : possibleBoards) {
-        cout << "Found move score " << (int)b.score << endl;
-        if (b.score < bestBoard.score) {
+        //cout << "Found move score " << (int)b.score << endl;
+        if (color == WHITE && b.score > bestBoard.score) 
             bestBoard = b;
-        }
+        else if (color == BLACK && b.score < bestBoard.score)
+            bestBoard = b;
     }
     return bestBoard.board;
 
@@ -34,8 +35,10 @@ MeasuredBoard Engine::getEngineScore(MeasuredBoard root, uint8_t depth, bool pla
     for (const MeasuredBoard b : getValidMoves(root, !player)) {
         MeasuredBoard current(b);
         if (depth > 0) {
-            current = getEngineScore(b, depth - 1, !player);
+            current = getEngineScore(current, depth - 1, !player);
         }
+//        if (b.score != current.score) 
+//            cout << "Initial measure " << (int) b.score << ", engine score " << (int) current.score << endl;
         possibleBoards.insert(current);
     }
     
@@ -49,6 +52,7 @@ MeasuredBoard Engine::getEngineScore(MeasuredBoard root, uint8_t depth, bool pla
         else if (player == BLACK && b.score < engineScored.score)
             engineScored.score = b.score;
     }
+    //cout << "Player " << player << ", depth " << (int)depth << ", best score found " << (int) engineScored.score << endl;
     return engineScored;
 }
 

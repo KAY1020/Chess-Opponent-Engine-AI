@@ -29,10 +29,14 @@ int main(int argc, char** argv) {
     while (input != "quit") {
         cin >> input;
         Move m = moveWrapper(board, input);
-        if (validateMove(board, m, turn)) {
-            move(board, m);
-            board = engine.getBestMove(board, BLACK, 1);
-        }
+//        if (validateMove(board, m, turn)) {
+//            move(board, m);
+            cout << "White's turn:" << endl;
+            board = engine.getBestMove(board, WHITE, 2);
+            displayBoard(board);
+            cout << "Black's turn:" << endl;
+            board = engine.getBestMove(board, BLACK, 2);
+//        }
         
     displayBoard(board);
     
