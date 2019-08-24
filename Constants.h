@@ -28,4 +28,8 @@
 #define WHITE true
 #define BLACK false
 
-static const uint8_t MASKS[] = {WHITE_MASK, BLACK_MASK};
+#define PAWN_START_WHITE 1
+#define PAWN_START_BLACK 6
+
+static const uint8_t MASKS[] = {BLACK_MASK, WHITE_MASK};
+static const uint8_t PAWN_START_Y[] = {PAWN_START_BLACK, PAWN_START_WHITE};

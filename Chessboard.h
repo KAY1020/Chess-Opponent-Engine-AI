@@ -11,6 +11,30 @@ struct Move {
     uint8_t fromY;
     uint8_t toX;
     uint8_t toY;
+    
+    Move() : fromX(0), fromY(0), toX(0), toY(0) {};
+    
+    Move (uint8_t _fromX, uint8_t _fromY) {
+        fromX = _fromX;
+        fromY = _fromY;
+        toX = _fromX;
+        toY = _fromY;
+    }
+    
+    Move (uint8_t _fromX, uint8_t _fromY, uint8_t _toX, uint8_t _toY) {
+        fromX = _fromX;
+        fromY = _fromY;
+        toX = _toX;
+        toY = _toY;
+    }
+    
+    Move(const Move& other) {
+        fromX = other.fromX;
+        fromY = other.fromY;
+        toX = other.toX;
+        toY = other.toY;
+    }
+    
 };
 
 void setDefault(Chessboard& board);

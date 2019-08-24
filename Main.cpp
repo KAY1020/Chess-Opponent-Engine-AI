@@ -18,10 +18,11 @@ Move moveWrapper(Chessboard& board, string input) {
 
 int main(int argc, char** argv) {
     Chessboard board(DEFAULT_BOARD);
+    Engine engine;
     bool turn = WHITE;
     string input;
-//    Engine engine;
-//    MeasuredBoard measuredBoard; 
+    
+    MeasuredBoard measuredBoard; 
     
     displayBoard(board);   
     
@@ -33,9 +34,11 @@ int main(int argc, char** argv) {
             turn = !turn;
         }
         
-        displayBoard(board);
-//        measuredBoard = engine.getMeasuredBoard(board);
-//        cout << "Board score = " << (int)measuredBoard.score << endl; 
+    displayBoard(board);
+    
+    measuredBoard = engine.getInitialMeasure(board);
+    engine.getValidMoves(measuredBoard, BLACK);
+
     }
     
     return 0;

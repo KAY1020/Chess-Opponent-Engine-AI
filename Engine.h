@@ -63,6 +63,11 @@ class Engine {
         
         unordered_set<MeasuredBoard> getValidMoves(MeasuredBoard b, bool color);
         unordered_set<MeasuredBoard> getMovesKnight(MeasuredBoard b, bool color, uint8_t x, uint8_t y);
+        unordered_set<MeasuredBoard> getMovesPawn(MeasuredBoard b, bool color, uint8_t x, uint8_t y);
+        unordered_set<MeasuredBoard> getMovesRook(MeasuredBoard b, bool color, uint8_t x, uint8_t y);
+        unordered_set<MeasuredBoard> getMovesBishop(MeasuredBoard b, bool color, uint8_t x, uint8_t y);
+        unordered_set<MeasuredBoard> getMovesQueen(MeasuredBoard b, bool color, uint8_t x, uint8_t y);
+        unordered_set<MeasuredBoard> getMovesKing(MeasuredBoard b, bool color, uint8_t x, uint8_t y);
         
         
     private:
