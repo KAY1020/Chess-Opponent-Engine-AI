@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
         Move m = moveWrapper(board, input);
         if (validateMove(board, m, turn)) {
             move(board, m);
-            board = engine.getBestMove(board, BLACK, 0);
+            board = engine.getBestMove(board, BLACK, 1);
         }
         
     displayBoard(board);
