@@ -60,7 +60,7 @@ class Engine {
         
         Chessboard getBestMove(Chessboard board, bool color, int depth);
         MeasuredBoard getInitialMeasure(Chessboard board) const; // make private later
-        MeasuredBoard getEngineScore(MeasuredBoard root, uint8_t depth, bool player); // Check
+        MeasuredBoard getEngineScore(MeasuredBoard root, uint8_t depth, int8_t alpha, int8_t beta, bool player);
         
         unordered_set<MeasuredBoard> getValidMoves(MeasuredBoard b, bool color);
         unordered_set<MeasuredBoard> getMovesKnight(MeasuredBoard b, bool color, uint8_t x, uint8_t y);

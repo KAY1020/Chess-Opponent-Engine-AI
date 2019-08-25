@@ -32,13 +32,14 @@ int main(int argc, char** argv) {
 //        if (validateMove(board, m, turn)) {
 //            move(board, m);
             cout << "White's turn:" << endl;
-            board = engine.getBestMove(board, WHITE, 2);
+            board = engine.getBestMove(board, WHITE, 4);
             displayBoard(board);
             cout << "Black's turn:" << endl;
-            board = engine.getBestMove(board, BLACK, 2);
+            board = engine.getBestMove(board, BLACK, 4);
 //        }
         
     displayBoard(board);
+    cout << "Score: " << (int)engine.getInitialMeasure(board).score << endl;
     
 //    measuredBoard = engine.getInitialMeasure(board);
 //    engine.getValidMoves(measuredBoard, BLACK);
