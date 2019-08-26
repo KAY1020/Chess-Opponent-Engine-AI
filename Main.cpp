@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
 //            board = engine.getBestMove(board, WHITE, 2);
             displayBoard(board);
             cout << "Black's turn:" << endl;
-            board = engine.getBestMove(board, BLACK, 4);
+            board = engine.getBestMove(board, BLACK, 3);
         }
         
     displayBoard(board);

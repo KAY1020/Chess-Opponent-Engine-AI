@@ -8,50 +8,64 @@ Engine::~Engine() {
 }
 
 Chessboard Engine::getBestMove(Chessboard board, bool color, int depth) {
-    MeasuredBoard mb = getInitialMeasure(board);
-    unordered_set<MeasuredBoard> possibleBoards;    
-    int8_t alpha = -100;
-    int8_t beta = 100;
-    
-    for (const MeasuredBoard b : getValidMoves(mb, color)) {
-        MeasuredBoard measured = getEngineScore(b, depth, alpha, beta, color);
-        possibleBoards.insert(measured);
-    }
-   
-    MeasuredBoard bestBoard(board, color == WHITE ? alpha : beta);
-    for (const MeasuredBoard b : possibleBoards) {
-        //cout << "Found move score " << (int)b.score << endl;
-        if (color == WHITE && b.score > bestBoard.score) 
-            bestBoard = b;
-        else if (color == BLACK && b.score < bestBoard.score)
-            bestBoard = b;
-    }
-    return bestBoard.board;
+    MeasuredBoard mb = getInitialMeasure(board); 
+    int16_t alpha = -10000;
+    int16_t beta = 10000;
 
+    if (color == WHITE) {
+        MeasuredBoard bestBoard(board, alpha);
+        cout << "Found move scores: ";
+        for (const MeasuredBoard b : getValidMoves(mb, WHITE)) {
+            MeasuredBoard current = getEngineScore(b, depth, alpha, beta, WHITE);
+            cout << (int)current.score << ", ";
+            if (current.score > bestBoard.score) 
+                bestBoard = current;
+        }
+        cout << endl << "Best move score: " << (int)bestBoard.score << endl;
+        return bestBoard.board;
+    }
+    else {
+        MeasuredBoard bestBoard(board, beta);
+        cout << "Found move scores: ";
+        for (const MeasuredBoard b : getValidMoves(mb, BLACK)) {
+            MeasuredBoard current = getEngineScore(b, depth, alpha, beta, BLACK);
+            cout << (int)current.score << ", ";
+            if (current.score < bestBoard.score) 
+                bestBoard = current;
+        }
+        cout << endl << "Best move score: " << (int)bestBoard.score << endl;
+        return bestBoard.board;
+    }
 }
 
-MeasuredBoard Engine::getEngineScore(MeasuredBoard root, uint8_t depth, int8_t alpha, int8_t beta, bool player) {
+MeasuredBoard Engine::getEngineScore(MeasuredBoard root, uint8_t depth, int16_t alpha, int16_t beta, bool player) {
     if (depth == 0)
         return root;
     
     if (player == WHITE) {
-        MeasuredBoard bestBoard(root.board, -100);
+        MeasuredBoard bestBoard(root.board, 10000);
+//        cout << "Black's possible moves: ";
         for (const MeasuredBoard b : getValidMoves(root, BLACK)) {
             MeasuredBoard current = getEngineScore(b, depth - 1, alpha, beta, BLACK);
-            if (current.score > bestBoard.score) bestBoard.score = current.score;
-            if (current.score > alpha) alpha = current.score;
-            if (beta <= alpha) break;
-        }
-        return bestBoard;
-    }
-    else {
-        MeasuredBoard bestBoard(root.board, 100);
-        for (const MeasuredBoard b : getValidMoves(root, WHITE)) {
-            MeasuredBoard current = getEngineScore(b, depth - 1, alpha, beta, WHITE);
+//            cout << (int)current.score << ", ";
             if (current.score < bestBoard.score) bestBoard.score = current.score;
             if (current.score < beta) beta = current.score;
             if (beta <= alpha) break;
         }
+//        cout << endl << "Best move score: " << (int)bestBoard.score << endl;
+        return bestBoard;
+    }
+    else {
+        MeasuredBoard bestBoard(root.board, -10000);
+//        cout << "White's possible moves: ";
+        for (const MeasuredBoard b : getValidMoves(root, WHITE)) {
+            MeasuredBoard current = getEngineScore(b, depth - 1, alpha, beta, WHITE);
+//            cout << (int)current.score << ", ";
+            if (current.score > bestBoard.score) bestBoard.score = current.score;
+            if (current.score > alpha) alpha = current.score;
+            if (beta <= alpha) break;
+        }
+//        cout << endl << "Best move score: " << (int)bestBoard.score << endl;
         return bestBoard;
     }
 }

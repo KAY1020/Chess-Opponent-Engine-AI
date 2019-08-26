@@ -4,16 +4,18 @@
 #include "Chessboard.h"
 #include "Constants.h"
 
-static const int8_t PIECE_SCORE[] = 
-    {0, 80, 9, 5, 3, 3, 1, 0, 0, -80, -9, -5, -3, -3, -1, 0};
+#define MOBILITY_SCORE 1
+
+static const int16_t PIECE_SCORE[] = 
+    {0, 100, 9, 5, 3, 3, 1, 0, 0, -100, -9, -5, -3, -3, -1, 0};
 
 struct MeasuredBoard {
     
     Chessboard board;
-    int8_t score; // your piece score - opponent piece score
+    int16_t score; // your piece score - opponent piece score
     
     MeasuredBoard() : board(0), score(0) {};
-    MeasuredBoard(const Chessboard b, const int8_t s) : board(b), score(s) {};
+    MeasuredBoard(const Chessboard b, const int16_t s) : board(b), score(s) {};
     MeasuredBoard(const MeasuredBoard& other) {
         board = other.board;
         score = other.score;
@@ -60,7 +62,7 @@ class Engine {
         
         Chessboard getBestMove(Chessboard board, bool color, int depth);
         MeasuredBoard getInitialMeasure(Chessboard board) const; // make private later
-        MeasuredBoard getEngineScore(MeasuredBoard root, uint8_t depth, int8_t alpha, int8_t beta, bool player);
+        MeasuredBoard getEngineScore(MeasuredBoard root, uint8_t depth, int16_t alpha, int16_t beta, bool player);
         
         unordered_set<MeasuredBoard> getValidMoves(MeasuredBoard b, bool color);
         unordered_set<MeasuredBoard> getMovesKnight(MeasuredBoard b, bool color, uint8_t x, uint8_t y);
